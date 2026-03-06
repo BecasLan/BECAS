@@ -1,0 +1,12 @@
+/Users/harun-pc/BECAS/target/debug/deps/colored-a921a20faa4c7260.d: /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/lib.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/color.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/control.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/error.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/style.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/customcolors.rs
+
+/Users/harun-pc/BECAS/target/debug/deps/libcolored-a921a20faa4c7260.rlib: /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/lib.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/color.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/control.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/error.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/style.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/customcolors.rs
+
+/Users/harun-pc/BECAS/target/debug/deps/libcolored-a921a20faa4c7260.rmeta: /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/lib.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/color.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/control.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/error.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/style.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/customcolors.rs
+
+/Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/lib.rs:
+/Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/color.rs:
+/Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/control.rs:
+/Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/error.rs:
+/Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/style.rs:
+/Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/colored-2.2.0/src/customcolors.rs:

@@ -1,0 +1,29 @@
+[package]
+name = "becas-core"
+version.workspace = true
+edition.workspace = true
+description = "BECAS Core — Sandbox, Resource Governor, Crypto, Access Levels, Service Manager"
+
+[dependencies]
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+sha2 = { workspace = true }
+ed25519-dalek = { workspace = true }
+rand = { workspace = true }
+aes-gcm = { workspace = true }
+x25519-dalek = { workspace = true }
+sysinfo = "0.31"
+hex = "0.4"
+regex-lite = "0.1"
+async-trait = "0.1"
+toml = "0.8"
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["test-util"] }
+tempfile = "3"

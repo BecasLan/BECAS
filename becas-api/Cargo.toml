@@ -1,0 +1,23 @@
+[package]
+name = "becas-api"
+version.workspace = true
+edition.workspace = true
+description = "BECAS API — Dashboard REST API, WebSocket monitoring, Cluster mode (powered by BecasTalk)"
+
+[dependencies]
+becas-core = { path = "../becas-core" }
+becas-net = { path = "../becas-net" }
+becas-shield = { path = "../becas-shield" }
+becastalk = { path = "../../BecasTalk" }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+sysinfo = "0.31"
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["test-util"] }

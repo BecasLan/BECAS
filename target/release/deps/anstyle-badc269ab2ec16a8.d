@@ -1,0 +1,12 @@
+/Users/harun-pc/BECAS/target/release/deps/anstyle-badc269ab2ec16a8.d: /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/lib.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/macros.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/color.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/effect.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/reset.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/style.rs
+
+/Users/harun-pc/BECAS/target/release/deps/libanstyle-badc269ab2ec16a8.rlib: /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/lib.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/macros.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/color.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/effect.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/reset.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/style.rs
+
+/Users/harun-pc/BECAS/target/release/deps/libanstyle-badc269ab2ec16a8.rmeta: /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/lib.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/macros.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/color.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/effect.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/reset.rs /Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/style.rs
+
+/Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/lib.rs:
+/Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/macros.rs:
+/Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/color.rs:
+/Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/effect.rs:
+/Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/reset.rs:
+/Users/harun-pc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anstyle-1.0.13/src/style.rs:

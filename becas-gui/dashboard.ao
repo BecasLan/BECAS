@@ -1,0 +1,456 @@
+// ══════════════════════════════════════════════════════════════════════
+// BECAS Dashboard — Better Call Safe Way
+// OS-Level Personal Cloud Platform — GPU-Rendered Control Center
+// Built with AloneOne Engine
+// ══════════════════════════════════════════════════════════════════════
+
+import std.time
+import std.math
+
+// ── Data Models ─────────────────────────────────────────────────────
+
+struct ServiceInfo {
+    name: String
+    service_type: String
+    status: Int         // 0=stopped, 1=running, 2=error
+    cpu_usage: Int
+    ram_usage: Int
+    port: Int
+    uptime_mins: Int
+    requests: Int
+}
+
+struct SystemMetrics {
+    cpu_total: Int
+    ram_used: Int
+    ram_total: Int
+    disk_used: Int
+    disk_total: Int
+    network_in: Int
+    network_out: Int
+}
+
+struct SecurityEvent {
+    level: Int          // 0=info, 1=warning, 2=blocked, 3=critical
+    message: String
+    ip: String
+    timestamp: String
+}
+
+struct GatewayStats {
+    total_requests: Int
+    allowed: Int
+    blocked: Int
+    rate_limited: Int
+    unique_ips: Int
+}
+
+// ── Helpers ─────────────────────────────────────────────────────────
+
+impl ServiceInfo {
+    fn is_running(self) -> Int {
+        if self.status == 1 { return 1 }
+        return 0
+    }
+
+    fn health_score(self) -> Int {
+        if self.status != 1 { return 0 }
+        return 100 - (self.cpu_usage + self.ram_usage) / 2
+    }
+}
+
+// ── App State ───────────────────────────────────────────────────────
+
+app BecasDashboard {
+    state {
+        page: Int = 0           // 0=overview, 1=services, 2=security, 3=settings
+        selected_service: Int = 0
+        access_level: Int = 1   // 0-4 graduated access
+        dark_mode: Int = 1
+        auto_recover: Int = 1
+    }
+}
+
+// ── Main View ───────────────────────────────────────────────────────
+
+view Main {
+    Vertical {
+        // ── Top Bar ──
+        Horizontal {
+            Text("🛡️ BECAS")
+            Spacer()
+            Badge("Layer Active")
+            Chip("v0.1.0")
+            Toggle()   // dark mode
+        }
+
+        Divider()
+
+        // ── Navigation ──
+        Horizontal {
+            Button("📊 Overview")
+            Button("📦 Services")
+            Button("🔒 Security")
+            Button("⚙️ Settings")
+        }
+
+        Spacer()
+
+        // ── Page Content ──
+        Card {
+            // Overview is default
+            Text("System Overview")
+            Divider()
+
+            // System Metrics Row
+            Horizontal {
+                Card {
+                    Text("💻 CPU")
+                    Text("23%")
+                    ProgressBar()
+                }
+                Card {
+                    Text("🧠 RAM")
+                    Text("8.2 / 32 GB")
+                    ProgressBar()
+                }
+                Card {
+                    Text("💾 Disk")
+                    Text("120 / 500 GB")
+                    ProgressBar()
+                }
+                Card {
+                    Text("🌐 Network")
+                    Text("↑ 2.4 MB/s")
+                    Text("↓ 12.1 MB/s")
+                }
+            }
+
+            Spacer()
+
+            // Services Summary
+            Text("Active Services")
+            Divider()
+
+            // Service Cards
+            Horizontal {
+                Card {
+                    Horizontal {
+                        Badge("🟢")
+                        Text("becasdb")
+                    }
+                    Text("Database | Port 5432")
+                    Text("CPU: 12% | RAM: 256MB")
+                    Text("15,420 requests")
+                    Horizontal {
+                        Button("Stop")
+                        Button("Restart")
+                        Button("Logs")
+                    }
+                }
+                Card {
+                    Horizontal {
+                        Badge("🟢")
+                        Text("becas-api")
+                    }
+                    Text("API | Port 8080")
+                    Text("CPU: 8% | RAM: 128MB")
+                    Text("42,100 requests")
+                    Horizontal {
+                        Button("Stop")
+                        Button("Restart")
+                        Button("Logs")
+                    }
+                }
+                Card {
+                    Horizontal {
+                        Badge("⚫")
+                        Text("becas-web")
+                    }
+                    Text("Web | Port 3000")
+                    Text("Stopped")
+                    Horizontal {
+                        Button("Start")
+                        Button("Remove")
+                    }
+                }
+            }
+
+            Spacer()
+
+            // Security Overview
+            Text("🔒 Security Gateway")
+            Divider()
+            Horizontal {
+                Card {
+                    Text("Total Requests")
+                    Text("57,520")
+                }
+                Card {
+                    Text("Allowed")
+                    Text("56,890")
+                    Badge("98.9%")
+                }
+                Card {
+                    Text("Blocked")
+                    Text("430")
+                    Badge("DDoS Protected")
+                }
+                Card {
+                    Text("Rate Limited")
+                    Text("200")
+                }
+            }
+
+            Spacer()
+
+            // Recent Security Events
+            Text("Recent Events")
+            Divider()
+            Card {
+                Text("⚠️ Rate limit hit — 192.168.1.50 — 2 min ago")
+                Text("🚫 IP blocked — 45.33.12.8 — 5 min ago (DDoS attempt)")
+                Text("✅ Anomaly cleared — becasdb — 12 min ago")
+                Text("🔑 Access level changed to Monitor — 1 hour ago")
+            }
+        }
+
+        Spacer()
+
+        // ── Footer ──
+        Horizontal {
+            Text("BECAS — Better Call Safe Way")
+            Spacer()
+            Chip("AloneOne Engine")
+            Chip("Rust + Cranelift + Metal")
+        }
+    }
+}
+
+// ── Services Detail View ────────────────────────────────────────────
+
+view ServicesView {
+    Vertical {
+        Text("📦 Service Management")
+        Divider()
+
+        // Deploy New Service
+        Card {
+            Text("Deploy New Service")
+            Horizontal {
+                Input("Service name...")
+                Input("Command...")
+                Input("Port...")
+            }
+            Horizontal {
+                Button("Database")
+                Button("API")
+                Button("Web")
+                Button("Worker")
+            }
+            Horizontal {
+                Slider()    // CPU limit
+                Slider()    // RAM limit
+            }
+            Button("🚀 Deploy")
+        }
+
+        Spacer()
+
+        // Service List
+        Text("Deployed Services")
+        Divider()
+
+        Card {
+            // Service table header
+            Horizontal {
+                Text("Status")
+                Text("Name")
+                Text("Type")
+                Text("CPU")
+                Text("RAM")
+                Text("Port")
+                Text("Uptime")
+                Text("Actions")
+            }
+            Divider()
+            // Service rows would be dynamically generated
+            Horizontal {
+                Badge("🟢")
+                Text("becasdb")
+                Chip("Database")
+                Text("12%")
+                Text("256MB")
+                Text("5432")
+                Text("2d 14h")
+                Horizontal {
+                    Button("⏹")
+                    Button("🔄")
+                    Button("📋")
+                }
+            }
+            Horizontal {
+                Badge("🟢")
+                Text("becas-api")
+                Chip("API")
+                Text("8%")
+                Text("128MB")
+                Text("8080")
+                Text("1d 6h")
+                Horizontal {
+                    Button("⏹")
+                    Button("🔄")
+                    Button("📋")
+                }
+            }
+        }
+    }
+}
+
+// ── Security View ───────────────────────────────────────────────────
+
+view SecurityView {
+    Vertical {
+        Text("🔒 Security Center")
+        Divider()
+
+        // Access Level Control
+        Card {
+            Text("Access Level")
+            Text("Controls how much you see of service internals")
+            Horizontal {
+                Button("👻 Ghost")
+                Button("📊 Monitor")
+                Button("🔍 Diagnostic")
+                Button("🚨 Emergency")
+                Button("👑 Owner")
+            }
+            Text("Current: Level 1 — Monitor")
+            Text("You see: service names, status, CPU/RAM usage")
+        }
+
+        Spacer()
+
+        // Gateway Configuration
+        Card {
+            Text("Security Gateway")
+            Horizontal {
+                Card {
+                    Text("Rate Limit / IP")
+                    Text("60 req/min")
+                    Slider()
+                }
+                Card {
+                    Text("Rate Limit / Service")
+                    Text("1000 req/min")
+                    Slider()
+                }
+                Card {
+                    Text("Max Request Size")
+                    Text("10 MB")
+                    Slider()
+                }
+            }
+            Horizontal {
+                Toggle()    // Anomaly Protection
+                Text("Anomaly Protection")
+                Toggle()    // Auto-block
+                Text("Auto-block after 5 violations")
+            }
+        }
+
+        Spacer()
+
+        // Firewall
+        Card {
+            Text("🛡️ Firewall")
+            Horizontal {
+                Input("IP address...")
+                Button("Block")
+                Button("Allow")
+            }
+            Text("Blocked IPs: 3")
+            Text("  45.33.12.8 — DDoS attempt")
+            Text("  103.21.44.2 — Brute force")
+            Text("  91.108.4.1 — Auto-blocked (5 violations)")
+        }
+
+        Spacer()
+
+        // Audit Log
+        Card {
+            Text("📜 Audit Log")
+            Text("Hash chain integrity: ✅ VALID")
+            Divider()
+            Text("2026-02-15 09:15:33 — Service becasdb deployed")
+            Text("2026-02-15 09:15:34 — Service becas-api deployed")
+            Text("2026-02-15 09:15:35 — Service becas-web deployed")
+            Text("2026-02-15 09:15:36 — becasdb started (PID 72004)")
+            Text("2026-02-15 09:16:12 — becasdb restarted (PID 72484)")
+        }
+    }
+}
+
+// ── Settings View ───────────────────────────────────────────────────
+
+view SettingsView {
+    Vertical {
+        Text("⚙️ BECAS Settings")
+        Divider()
+
+        Card {
+            Text("Layer Configuration")
+            Horizontal {
+                Text("Data Directory")
+                Input("~/.becas-layer")
+            }
+            Horizontal {
+                Toggle()
+                Text("Auto-recover services on boot")
+            }
+            Horizontal {
+                Toggle()
+                Text("Install as system service (LaunchAgent)")
+            }
+        }
+
+        Spacer()
+
+        Card {
+            Text("Node Identity")
+            Text("🔑 Node ID: becas-7f3a2e...")
+            Text("📍 Public Key: ed25519:a4b8c2...")
+            Button("Regenerate Identity")
+        }
+
+        Spacer()
+
+        Card {
+            Text("Resource Defaults")
+            Horizontal {
+                Text("Default CPU Limit")
+                Slider()
+                Text("15%")
+            }
+            Horizontal {
+                Text("Default RAM Limit")
+                Slider()
+                Text("2048 MB")
+            }
+            Horizontal {
+                Text("Default Disk Limit")
+                Slider()
+                Text("10 GB")
+            }
+        }
+
+        Spacer()
+
+        Card {
+            Text("Danger Zone")
+            Button("🗑️ Remove All Services")
+            Button("🔄 Reset BECAS Layer")
+            Button("📦 Export Configuration")
+        }
+    }
+}

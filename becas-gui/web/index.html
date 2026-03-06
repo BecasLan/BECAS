@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BECAS Control Panel</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0f0b0d;--surface:#1a1315;--card:#221a1d;--border:#3a2830;--accent:#e8364b;--accent-dim:#b82a3c;--accent-glow:#e8364b25;--green:#34d058;--yellow:#f0b429;--orange:#f97316;--text:#ede4e6;--text-dim:#a8949a;--text-muted:#6b5a60;--mono:'SF Mono','Fira Code',monospace}
+body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+.app{max-width:1360px;margin:0 auto;padding:24px}
+
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);margin-bottom:28px}
+.hdr-left{display:flex;align-items:center;gap:14px}
+.hdr h1{font-size:18px;font-weight:600;letter-spacing:-.3px;color:var(--text)}
+.hdr h1 span{color:var(--accent);font-weight:700}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block}
+.hdr-right{font-size:12px;color:var(--text-muted);font-family:var(--mono);text-align:right;line-height:1.6}
+
+.nav{display:flex;gap:2px;margin-bottom:24px;border-bottom:1px solid var(--border);padding-bottom:0}
+.nav-item{padding:10px 18px;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s}
+.nav-item:hover{color:var(--text)}
+.nav-item.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+.grid{display:grid;gap:16px}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;transition:border-color .2s}
+.card:hover{border-color:var(--accent-dim)}
+.card-label{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.card-label svg{width:14px;height:14px;stroke:var(--text-muted);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.card-val{font-size:28px;font-weight:700;font-family:var(--mono);letter-spacing:-1px}
+.card-sub{font-size:12px;color:var(--text-muted);margin-top:4px}
+.bar{height:4px;background:var(--border);border-radius:2px;margin-top:10px;overflow:hidden}
+.bar-fill{height:100%;border-radius:2px;transition:width .8s ease}
+.bf-r{background:var(--accent)}
+.bf-g{background:var(--green)}
+.bf-y{background:var(--yellow)}
+
+.sec{font-size:13px;font-weight:600;color:var(--text-dim);margin:28px 0 12px;text-transform:uppercase;letter-spacing:.6px}
+
+.svc{display:flex;align-items:center;padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:6px;margin-bottom:8px;transition:all .15s}
+.svc:hover{border-color:var(--accent-dim);background:#1e1818}
+.svc-dot{width:8px;height:8px;border-radius:50%;margin-right:14px;flex-shrink:0}
+.svc-dot.on{background:var(--green);box-shadow:0 0 10px #34d05860}
+.svc-dot.off{background:var(--text-muted)}
+.svc-info{flex:1}
+.svc-name{font-weight:600;font-size:13px}
+.svc-meta{font-size:11px;color:var(--text-muted);margin-top:2px;font-family:var(--mono)}
+.svc-stats{display:flex;gap:16px;font-size:11px;color:var(--text-dim);font-family:var(--mono)}
+.svc-actions{display:flex;gap:6px;margin-left:16px}
+
+.btn{padding:5px 14px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text-dim);font-size:11px;font-family:inherit;cursor:pointer;transition:all .15s}
+.btn:hover{border-color:var(--accent);color:var(--text)}
+.btn-r{border-color:var(--accent-dim);color:var(--accent)}
+.btn-r:hover{background:var(--accent);color:#fff}
+.btn-g{border-color:#34d05860;color:var(--green)}
+.btn-g:hover{background:var(--green);color:#fff}
+
+.deploy-form{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.drop-zone{border:2px dashed var(--border);border-radius:8px;padding:20px;text-align:center;color:var(--text-dim);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px}
+.drop-zone:hover,.drop-zone.drag-over{border-color:var(--accent);color:var(--accent);background:var(--accent-glow)}
+.deploy-input{flex:1;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;transition:border-color .2s}
+.deploy-input:focus{border-color:var(--accent)}
+.deploy-input::placeholder{color:var(--text-muted)}
+.btn-deploy{padding:10px 24px;background:var(--accent);border:none;border-radius:6px;color:#fff;font-weight:600;font-size:13px;cursor:pointer;transition:all .15s;font-family:inherit}
+.btn-deploy:hover{background:var(--accent-dim);transform:translateY(-1px)}
+.btn-deploy:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.deploy-result{margin-top:8px;padding:10px 14px;border-radius:6px;font-size:12px;font-family:var(--mono);display:none}
+.deploy-ok{background:#34d05815;border:1px solid #34d05840;color:var(--green)}
+.deploy-err{background:#e8364b15;border:1px solid #e8364b40;color:var(--accent)}
+
+.log{font-size:12px;font-family:var(--mono);line-height:1.8}
+.log-row{display:flex;gap:12px;padding:6px 12px;border-bottom:1px solid #1e1818}
+.log-row:last-child{border-bottom:none}
+.log-time{color:var(--text-muted);min-width:50px}
+.log-tag{padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;min-width:50px;text-align:center}
+.t-block{background:#c92a2a20;color:var(--accent)}
+.t-warn{background:#b8932020;color:var(--yellow)}
+.t-info{background:#2d9d4e20;color:var(--green)}
+.log-msg{color:var(--text-dim);flex:1}
+.log-ip{color:var(--text-muted)}
+
+.set-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #1e1818;font-size:13px}
+.set-row:last-child{border-bottom:none}
+.set-label{font-weight:500}
+.set-desc{font-size:11px;color:var(--text-muted);margin-top:2px}
+.set-val{font-family:var(--mono);font-size:12px;color:var(--text-dim)}
+.sw{width:36px;height:20px;border-radius:10px;background:var(--border);cursor:pointer;position:relative;transition:background .2s}
+.sw.on{background:var(--accent)}
+.sw::after{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:var(--text);top:2px;left:2px;transition:left .2s}
+.sw.on::after{left:18px}
+
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+@media(max-width:900px){.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:1fr}}
+@media(max-width:600px){.g4,.g2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="hdr">
+<div class="hdr-left">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e8364b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+<h1><span>BECAS</span> Control Panel</h1>
+<span class="status-dot"></span>
+</div>
+<div class="hdr-right"><span id="h-node">loading...</span><br><span id="h-engine">-</span></div>
+</div>
+
+<div class="nav">
+<div class="nav-item active" data-tab="overview">Overview</div>
+<div class="nav-item" data-tab="services">Services</div>
+<div class="nav-item" data-tab="security">Security</div>
+<div class="nav-item" data-tab="settings">Settings</div>
+</div>
+
+<div id="overview" class="tab-content active">
+<div class="grid g4" id="metrics"></div>
+<div class="sec">Services</div>
+<div id="ov-svc">
+<div class="svc"><div class="svc-info"><span class="svc-meta">No services deployed. Run: becas auto ./project --start</span></div></div>
+</div>
+<div class="sec">Request Volume</div>
+<div class="card" style="padding:12px"><canvas id="chart" height="100"></canvas></div>
+</div>
+
+<div id="services" class="tab-content">
+<div class="sec" style="margin-top:0">Deploy</div>
+<div class="deploy-form">
+<div id="drop-zone" class="drop-zone" onclick="document.getElementById('folder-picker').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleDrop(event)">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+<span>Click to browse or drop project folder</span>
+<input type="file" id="folder-picker" webkitdirectory directory multiple style="display:none" onchange="handleBrowse(this)">
+</div>
+<div style="display:flex;gap:8px;align-items:center">
+<input class="deploy-input" id="deploy-path" type="text" placeholder="/path/to/project or binary" style="flex:1">
+<input class="deploy-input" id="deploy-name" type="text" placeholder="name (optional)" style="max-width:160px">
+<button class="btn-deploy" id="deploy-btn" onclick="doDeploy()">Deploy</button>
+</div>
+</div>
+<div class="deploy-result" id="deploy-result"></div>
+<div class="sec">Mesh Network</div>
+<div id="mesh-panel" class="card" style="margin-bottom:16px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<span style="color:var(--text-dim)">Exposed Services</span>
+<span id="mesh-status" style="font-size:12px;padding:2px 8px;border-radius:4px;background:var(--border);color:var(--text-dim)">checking...</span>
+</div>
+<div id="mesh-list" style="margin-top:10px;font-size:13px"></div>
+</div>
+<div class="sec">Deployed Services</div>
+<div id="svc-list">
+<div class="svc"><div class="svc-info"><span class="svc-meta">No services deployed</span></div></div>
+</div>
+</div>
+
+<div id="security" class="tab-content">
+<div class="grid g3" style="margin-bottom:20px">
+<div class="card"><div class="card-label"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>GATEWAY</div><div class="card-val" style="color:var(--green)">Active</div><div class="card-sub">SecurityGateway running</div></div>
+<div class="card"><div class="card-label"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>BLOCKED</div><div class="card-val" id="sec-blocked">0</div><div class="card-sub">Auto-blocked by anomaly detection</div></div>
+<div class="card"><div class="card-label"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>AUDIT</div><div class="card-val" style="color:var(--green)">Valid</div><div class="card-sub">SHA-256 hash chain verified</div></div>
+</div>
+<div class="sec">Active Tunnels</div>
+<div id="tunnel-panel" class="card" style="margin-bottom:16px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<span style="color:var(--text-dim)">Public URLs (Cloudflare Tunnel)</span>
+<span id="tunnel-count" style="font-size:12px;padding:2px 8px;border-radius:4px;background:var(--border);color:var(--text-dim)">0 tunnels</span>
+</div>
+<div id="tunnel-list" style="margin-top:10px;font-size:13px"><span style="color:var(--text-muted)">No active tunnels</span></div>
+</div>
+<div class="sec">Audit Log</div>
+<div class="card" style="padding:0;max-height:300px;overflow-y:auto" id="audit-panel">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border)">
+<span style="color:var(--text-dim);font-size:13px">Recent Events</span>
+<span id="audit-total" style="font-size:12px;color:var(--text-muted)">0 total</span>
+</div>
+<div id="audit-list"><div class="log-row"><span class="log-msg" style="color:var(--text-muted)">No audit entries</span></div></div>
+</div>
+<div class="sec" style="margin-top:16px">Firewall Events</div>
+<div class="card" style="padding:0" id="fw-log"><div class="log-row"><span class="log-msg" style="color:var(--text-muted)">No events recorded</span></div></div>
+</div>
+
+<div id="settings" class="tab-content">
+<div class="sec">General</div>
+<div class="card" style="padding:0">
+<div class="set-row"><div><div class="set-label">Data Directory</div><div class="set-desc">Service data and configuration</div></div><div class="set-val">~/.becas</div></div>
+<div class="set-row"><div><div class="set-label">Auto-recover on boot</div><div class="set-desc">Restart services after system reboot</div></div><div class="sw on" onclick="this.classList.toggle('on')"></div></div>
+<div class="set-row"><div><div class="set-label">Anomaly detection</div><div class="set-desc">Baseline learning with auto-escalation</div></div><div class="sw on" onclick="this.classList.toggle('on')"></div></div>
+</div>
+<div class="sec">Resource Defaults</div>
+<div class="card" style="padding:0">
+<div class="set-row"><div><div class="set-label">CPU Limit</div><div class="set-desc">Max CPU per service</div></div><div class="set-val">25%</div></div>
+<div class="set-row"><div><div class="set-label">RAM Limit</div><div class="set-desc">Max memory per service</div></div><div class="set-val">1024 MB</div></div>
+<div class="set-row"><div><div class="set-label">Rate Limit</div><div class="set-desc">Max req/sec per IP</div></div><div class="set-val">100</div></div>
+</div>
+<div class="sec" style="color:var(--accent)">Danger Zone</div>
+<div class="card" style="border-color:var(--accent-dim)"><div style="display:flex;gap:8px"><button class="btn btn-r">Remove All Services</button><button class="btn btn-r">Reset Layer</button><button class="btn">Export Config</button></div></div>
+</div>
+</div>
+
+<script>
+let SVC=[];
+
+// SVG icons
+const IC={
+cpu:'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="15" x2="23" y2="15"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="15" x2="4" y2="15"/></svg>',
+mem:'<svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="12" x2="6" y2="12.01"/><line x1="10" y1="12" x2="10" y2="12.01"/><line x1="14" y1="12" x2="14" y2="12.01"/><line x1="18" y1="12" x2="18" y2="12.01"/></svg>',
+disk:'<svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>',
+net:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15 15 0 014 10 15 15 0 01-4 10 15 15 0 01-4-10 15 15 0 014-10z"/></svg>'
+};
+
+// Tabs
+document.querySelectorAll('.nav-item').forEach(t=>{
+t.addEventListener('click',function(){
+document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+this.classList.add('active');
+document.getElementById(this.dataset.tab).classList.add('active');
+});
+});
+
+// Render metrics
+function renderMetrics(d){
+document.getElementById('metrics').innerHTML=`
+<div class="card"><div class="card-label">${IC.cpu}CPU</div><div class="card-val">${d.cpu_percent}%</div><div class="card-sub">${d.cpu_name||'Unknown'} &middot; ${d.cpu_cores} cores</div><div class="bar"><div class="bar-fill ${d.cpu_percent>70?'bf-r':d.cpu_percent>40?'bf-y':'bf-g'}" style="width:${d.cpu_percent}%"></div></div></div>
+<div class="card"><div class="card-label">${IC.mem}MEMORY</div><div class="card-val">${d.ram_used_gb} GB</div><div class="card-sub">of ${d.ram_total_gb} GB total</div><div class="bar"><div class="bar-fill bf-r" style="width:${(d.ram_used_gb/d.ram_total_gb*100).toFixed(0)}%"></div></div></div>
+<div class="card"><div class="card-label">${IC.disk}DISK</div><div class="card-val">${d.disk_used_gb} GB</div><div class="card-sub">of ${d.disk_total_gb} GB total</div><div class="bar"><div class="bar-fill ${d.disk_used_gb/d.disk_total_gb>.9?'bf-r':'bf-y'}" style="width:${(d.disk_used_gb/d.disk_total_gb*100).toFixed(0)}%"></div></div></div>
+<div class="card"><div class="card-label">${IC.net}NETWORK</div><div class="card-val">${d.hostname||'-'}</div><div class="card-sub">${d.os} ${d.os_version}</div><div class="bar"><div class="bar-fill bf-g" style="width:20%"></div></div></div>`;
+}
+
+// Render services
+function renderSvc(id,actions){
+const el=document.getElementById(id);
+if(!SVC.length){el.innerHTML='<div class="svc"><div class="svc-info"><span class="svc-meta">No services deployed. Run: becas auto ./project --start</span></div></div>';return}
+el.innerHTML=SVC.map(s=>`<div class="svc">
+<div class="svc-dot ${s.status==='Running'?'on':'off'}"></div>
+<div class="svc-info"><div class="svc-name">${s.name}</div><div class="svc-meta">${s.service_type} &middot; :${s.port} &middot; pid ${s.pid||'-'}</div></div>
+<div class="svc-stats"><span>${Math.round(s.cpu_limit)}% cpu</span><span>${s.ram_limit_mb}MB</span><span>${s.requests||0} req</span></div>
+${actions?`<div class="svc-actions">${s.status==='Running'?
+'<button class="btn btn-r" onclick="svcAction(\''+s.name+'\',\'stop\')">Stop</button>':
+'<button class="btn btn-g" onclick="svcAction(\''+s.name+'\',\'start\')">Start</button>'
+}<button class="btn" onclick="svcLogs(\''+s.name+'\')">Logs</button></div>`:''}</div>`).join('');
+}
+
+// Service actions
+async function svcAction(name,action){
+try{const r=await fetch('/api/services/'+name+'/'+action,{method:'POST'});const d=await r.json();if(d.error)alert(d.error);fetchServices()}catch(e){alert('Action failed: '+e)}
+}
+function svcLogs(name){alert('becas logs '+name+'\n\nRun in terminal for full logs.')}
+
+// Chart
+function drawChart(){
+const c=document.getElementById('chart'),x=c.getContext('2d');
+c.width=c.parentElement.clientWidth-24;const w=c.width,h=c.height;
+x.fillStyle='var(--card)';x.fillRect(0,0,w,h);
+const d=window._chartData||(window._chartData=Array.from({length:48},()=>0));
+if(window._lastCpu!==undefined)d.push(window._lastCpu);if(d.length>48)d.shift();window._chartData=d;
+const mx=Math.max(...d,1),st=w/Math.max(d.length-1,1);
+x.strokeStyle='#1e1818';x.lineWidth=.5;
+for(let i=0;i<5;i++){const y=h*i/4;x.beginPath();x.moveTo(0,y);x.lineTo(w,y);x.stroke()}
+x.strokeStyle='#e8364b';x.lineWidth=1.5;x.beginPath();
+d.forEach((v,i)=>{const px=i*st,py=h-(v/mx)*h*.85;i===0?x.moveTo(px,py):x.lineTo(px,py)});
+x.stroke();
+const gf=x.createLinearGradient(0,0,0,h);gf.addColorStop(0,'#e8364b20');gf.addColorStop(1,'#e8364b00');
+x.fillStyle=gf;x.lineTo(w,h);x.lineTo(0,h);x.fill();
+x.fillStyle='#5c5250';x.font='10px '+getComputedStyle(document.body).getPropertyValue('--mono');
+x.fillText('24h',4,h-4);x.fillText('now',w-24,h-4);
+}
+
+// API fetchers
+async function fetchSystem(){
+try{const r=await fetch('/api/system');const d=await r.json();window._lastCpu=d.cpu_percent;renderMetrics(d);drawChart()}catch(e){}
+}
+async function fetchServices(){
+try{const r=await fetch('/api/services');const d=await r.json();SVC=d.services||[];renderSvc('ov-svc',false);renderSvc('svc-list',true)}catch(e){}
+}
+async function fetchNode(){
+try{const r=await fetch('/api/node');const d=await r.json();
+document.getElementById('h-node').textContent=d.node_id;
+document.getElementById('h-engine').textContent=d.engine+' v'+d.version}catch(e){}
+}
+
+// Deploy
+function handleBrowse(input){
+if(input.files.length>0){
+const path=input.files[0].webkitRelativePath;
+const folder=path?path.split('/')[0]:'';
+if(folder){document.getElementById('deploy-path').value=folder;document.getElementById('deploy-name').value=folder;
+document.getElementById('drop-zone').querySelector('span').textContent='Selected: '+folder}
+}}
+function handleDrop(e){e.preventDefault();e.target.closest('.drop-zone').classList.remove('drag-over');const items=e.dataTransfer.items;if(items&&items.length>0){const entry=items[0].webkitGetAsEntry&&items[0].webkitGetAsEntry();if(entry&&entry.isDirectory){document.getElementById('deploy-path').value=entry.fullPath||entry.name;doDeploy()}else if(e.dataTransfer.files.length>0){document.getElementById('deploy-path').value=e.dataTransfer.files[0].name}}}
+async function doDeploy(){
+const path=document.getElementById('deploy-path').value.trim();
+const name=document.getElementById('deploy-name').value.trim();
+const res=document.getElementById('deploy-result');
+const btn=document.getElementById('deploy-btn');
+if(!path){document.getElementById('deploy-path').focus();return}
+btn.disabled=true;btn.textContent='Deploying...';
+res.style.display='none';
+try{
+const body={path};if(name)body.name=name;
+const r=await fetch('/api/deploy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+const d=await r.json();
+res.style.display='block';
+if(d.error){res.className='deploy-result deploy-err';res.textContent='Error: '+d.error}
+else{res.className='deploy-result deploy-ok';res.textContent='Deployed: '+d.name+' ('+d.service_type+') on port '+(d.ports||[]).join(', ');
+document.getElementById('deploy-path').value='';document.getElementById('deploy-name').value='';fetchServices()}
+}catch(e){res.style.display='block';res.className='deploy-result deploy-err';res.textContent='Failed: '+e}
+btn.disabled=false;btn.textContent='Deploy';
+}
+
+async function fetchMesh(){
+try{const r=await fetch('/api/mesh');const d=await r.json();
+const ms=document.getElementById('mesh-status');
+const ml=document.getElementById('mesh-list');
+if(d.mesh_status==='active'){ms.textContent=d.exposed_count+' live';ms.style.background='#34d05820';ms.style.color='var(--green)'}
+else{ms.textContent='no services';ms.style.background='var(--border)';ms.style.color='var(--text-dim)'}
+if(d.exposed&&d.exposed.length>0){
+ml.innerHTML=d.exposed.map(e=>'<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)"><div><span style="color:var(--green)">●</span> <span style="color:var(--text)">'+e.name+'</span> <span style="color:var(--text-muted)">:'+e.port+'</span></div><a href="'+e.url+'" style="color:var(--accent);font-size:12px;text-decoration:none" target="_blank">'+e.url+'</a></div>').join('')}
+else{ml.innerHTML='<span style="color:var(--text-muted)">No services exposed — start a service to auto-expose</span>'}
+}catch(e){}}
+// Unified real-time stream — single endpoint replaces 6 separate fetches
+async function fetchStream(){
+try{const r=await fetch('/api/stream');const d=await r.json();
+
+// System metrics
+if(d.system){
+window._lastCpu=d.system.cpu;
+renderMetrics({cpu_percent:d.system.cpu,ram_used_gb:d.system.ram_used,ram_total_gb:d.system.ram_total,cpu_cores:d.system.cores});
+drawChart()}
+
+// Services
+if(d.services){SVC=d.services.map(s=>({name:s.name,status:s.status,port:s.port,pid:s.pid,tunnel_url:s.tunnel_url,lan_url:s.lan_url}));renderSvc('ov-svc',false);renderSvc('svc-list',true)}
+
+// Tunnels
+const tc=document.getElementById('tunnel-count');
+const tl=document.getElementById('tunnel-list');
+if(d.tunnels&&d.tunnels.length>0){
+tc.textContent=d.tunnel_count+' active';tc.style.background='#34d05820';tc.style.color='var(--green)';
+tl.innerHTML=d.tunnels.map(t=>'<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)"><div><span style="color:var(--green)">●</span> <span style="color:var(--text)">'+t.service+'</span></div><a href="'+t.url+'" style="color:var(--accent);font-size:12px;text-decoration:none" target="_blank">'+t.url+'</a></div>').join('')}
+else{tc.textContent='0 tunnels';tc.style.background='var(--border)';tc.style.color='var(--text-dim)';
+tl.innerHTML='<span style="color:var(--text-muted)">No active tunnels — start a service to auto-tunnel</span>'}
+
+// Audit
+document.getElementById('audit-total').textContent=(d.audit_total||0)+' total';
+const al=document.getElementById('audit-list');
+if(d.audit&&d.audit.length>0){
+const colors={ip_blocked:'var(--red)',access_level_change:'#f5a623',service_removed:'var(--red)',service_deployed:'var(--green)',service_started:'var(--green)',service_stopped:'#f5a623'};
+al.innerHTML=d.audit.slice().reverse().map(e=>{
+const t=e.timestamp?e.timestamp.substring(11,19):'';
+const c=colors[e.event_type]||'var(--text)';
+const detail=typeof e.data==='object'?JSON.stringify(e.data):'';
+return '<div class="log-row" style="padding:6px 14px;border-bottom:1px solid var(--border);display:flex;gap:12px;font-size:12px"><span style="color:var(--text-muted);min-width:60px">'+t+'</span><span style="color:'+c+';min-width:140px">'+e.event_type+'</span><span style="color:var(--text-dim);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+detail+'</span></div>'
+}).join('')}
+else{al.innerHTML='<div class="log-row"><span class="log-msg" style="color:var(--text-muted)">No audit entries</span></div>'}
+
+}catch(e){console.warn('Stream fetch failed:',e)}}
+
+// Legacy fetchers kept for compatibility (mesh, node)
+async function fetchAudit(){}
+async function fetchTunnels(){}
+
+// Initial load: stream + node + mesh
+fetchStream();fetchNode();fetchMesh();
+// Real-time: unified stream every 2 seconds (was 6 calls × 3-5s each)
+setInterval(fetchStream,2000);
+setInterval(fetchMesh,5000);
+setTimeout(drawChart,200);
+addEventListener('resize',drawChart);
+</script>
+</body>
+</html>

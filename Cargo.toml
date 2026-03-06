@@ -1,0 +1,32 @@
+[workspace]
+resolver = "2"
+members = [
+    "becas-core",
+    "becas-net",
+    "becas-shield",
+    "becas-api",
+    "becas-cli",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["BECAS Team"]
+license = "MIT"
+description = "BECAS — Better Call Safe Way: OS-level personal cloud platform"
+
+[workspace.dependencies]
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+thiserror = "1"
+anyhow = "1"
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+sha2 = "0.10"
+ed25519-dalek = { version = "2", features = ["rand_core"] }
+rand = "0.8"
+aes-gcm = "0.10"
+x25519-dalek = { version = "2", features = ["static_secrets"] }

@@ -1,0 +1,31 @@
+[package]
+name = "becas-cli"
+version.workspace = true
+edition.workspace = true
+description = "BECAS CLI — Command line interface for BECAS platform"
+
+[[bin]]
+name = "becas"
+path = "src/main.rs"
+
+[dependencies]
+becas-core = { path = "../becas-core" }
+becas-net = { path = "../becas-net" }
+becas-shield = { path = "../becas-shield" }
+becastalk = { path = "../../BecasTalk" }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+anyhow = { workspace = true }
+uuid = { workspace = true }
+clap = { version = "4", features = ["derive"] }
+colored = "2"
+indicatif = "0.17"
+sysinfo = "0.31"
+chrono = { workspace = true }
+
+# TUI dependencies
+ratatui = "0.29"
+crossterm = "0.28"
