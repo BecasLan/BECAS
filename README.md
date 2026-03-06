@@ -9,7 +9,7 @@
 
 [![Tests](https://img.shields.io/badge/tests-129%20passing-brightgreen)]()
 [![Rust](https://img.shields.io/badge/rust-2021-orange)]()
-[![License](https://img.shields.io/badge/license-MIT-blue)]()
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue)](https://www.apache.org/licenses/LICENSE-2.0)
 
 ---
 
