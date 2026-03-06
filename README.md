@@ -108,7 +108,7 @@ becas stop my-api
 │  │                                                         │ │
 │  │  ┌──────────┐ ┌──────────┐ ┌──────────┐                │ │
 │  │  │ Service A│ │ Service B│ │ Service C│  ← Sandboxed   │ │
-│  │  │ (BecasDB)│ │ (API)    │ │ (Web)    │                │ │
+│  │  │(PostgreSql)│ │ (API)    │ │ (Web)    │                │ │
 │  │  └────┬─────┘ └────┬─────┘ └────┬─────┘                │ │
 │  │       │             │             │                      │ │
 │  │  ┌────┴─────────────┴─────────────┴─────┐               │ │
@@ -237,20 +237,20 @@ becas info                  Show system information
 
 ---
 
-## 🌍 Real-World Example: BecasDB
+## 🌍 Real-World Example: PostgreSql
 
 ```bash
-# Deploy BecasDB on your PC — zero config
+# Deploy PostgreSql on your PC — zero config
 becas init
-becas auto ./becasdb --start
+becas auto ./postgresql --start
 
-# BecasDB is now serving on localhost:9000
+# PostgreSql is now serving on localhost:9000
 curl http://localhost:9000/health
 # → {"status": "healthy", "checks": [storage: pass, index: pass]}
 
 # Expose to the internet
-becas tunnel becasdb
-# → 🌐 https://becasdb.becas.net → localhost:9000
+becas tunnel postgresql
+# → 🌐 https://postgresql.becas.net → localhost:9000
 
 # Your database, your PC, your rules. $0/month.
 ```
@@ -259,7 +259,6 @@ becas tunnel becasdb
 
 ## 🔮 Roadmap
 
-- [ ] AloneOne GUI — Native GPU-accelerated dashboard
 - [ ] Mobile companion app — iOS/Android monitoring
 - [ ] Plugin marketplace — Community service templates
 - [ ] Multi-region cluster — Cross-internet PC federation
@@ -280,8 +279,6 @@ becas tunnel becasdb
 ## 🤝 Built With
 
 - **Rust** — Core engine, compiler-verified safety
-- **BecasTalk** — Custom HTTP/WebSocket engine (zero external deps)
-- **AloneOne** — Custom UI language & GPU renderer (for GUI)
 
 ---
 
