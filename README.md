@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div align="center">
 
 # 🛡️ BECAS
@@ -293,3 +294,7 @@ becas tunnel becasdb
 Made with 🛡️ by the BECAS Team
 
 </div>
+=======
+# BECAS
+An OS-level personal cloud platform built in Rust
+>>>>>>> 7b4f048da8421babb1da7ec1005ac7e0dc6fb149
